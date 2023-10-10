@@ -44,9 +44,8 @@ contract NFT is ERC721 ,ERC721Enumerable,Ownable ,ERC721URIStorage{
         return super.tokenURI(tokenId);
     }
 
-    function mintTo(address recipient, string memory _name, uint _price, string memory _description, string memory _tokenUri ,string memory _metadataTokenUri) public onlyOwner returns (uint256)
+    function mintTo(address recipient, string memory _name, uint _price, string memory _description, string memory _tokenUri ,string memory _metadataTokenUri) public  returns (uint256)
     {
-        require(recipient==getOwnerAddress(), "Only Owner Can mint");
         currentTokenId.increment();
         uint256 newItemId = currentTokenId.current();
         DetailsOfTokenID[newItemId]=Details(_name,_price,_description,_tokenUri,_metadataTokenUri);

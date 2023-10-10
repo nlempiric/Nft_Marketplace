@@ -76,7 +76,7 @@ const Mint = ({ ncontract, client }) => {
 
       } catch (err) {
         console.log(err);
-        toast.error(err)
+        toast.error("Transaction")
       }
       finally
       {
@@ -103,33 +103,7 @@ const Mint = ({ ncontract, client }) => {
     });
   };
 
-  useEffect(() => {
-    console.log("helloq world");
-  }, [])
-  
-  // useEffect(() => {
-  //   const handleshowNft1 = async () => {
-  //     try {
-  //       const balance = await ncontract.balanceOf(address);
-  //       const balancinNumber = Number(balance._hex);
 
-  //       const newDataArray = [];
-
-  //       for (let i = 0; i < balancinNumber; i++) {
-  //         const tokenid = await ncontract.tokenOfOwnerByIndex(address, i);
-  //         const tokenidNumber = Number(tokenid._hex);
-  //         const data = await ncontract.getData(tokenidNumber);
-  //         newDataArray.push(data);
-  //       }
-
-  //       setgetData(newDataArray);
-  //     } catch (error) {
-  //       console.log("error", error);
-  //     }
-  //   };
-
-  //   handleshowNft1();
-  // }, [minted, address]);
 
   return (
     <>
@@ -220,43 +194,7 @@ const Mint = ({ ncontract, client }) => {
               </div>
             </div>
 
-            <div className=" flex justify-center bg-[#0b1138] text-3xl py-2 rounded-xl w-full">
-              <h1>NFTS</h1>
-            </div>
-            <div className="flex flex-wrap my-12 w-full justify-start gap-6">
-              {getData ? (
-                getData.map((items, index) => {
-                  const name = items[0];
-                  const price = Number(items[1]._hex);
-                  const desc = items[2];
-                  const i = items[3];
-
-                  return (
-                    <>
-                      <div
-                        key={index}
-                        className="w-[250px] h-[350px] bg-[#0b1138] rounded overflow-hidden shadow-lg my-4 hover:opacity-70"
-                      >
-                        <img
-                          className="w-full h-[70%] object-cover"
-                          src={i}
-                          alt="Sunset in the mountains"
-                        />
-                        <div className="px-6 py-2">
-                          <div className="font-bold text-xl mb-2">{name}</div>
-                          <div className="font-semibold text-base mb-2">
-                            {price}Eth
-                          </div>
-                          <p className="text-sm text-gray-300">{desc}</p>
-                        </div>
-                      </div>
-                    </>
-                  );
-                })
-              ) : (
-                <p>No NFTs</p>
-              )}
-            </div>
+           
             </>
           )}
             
