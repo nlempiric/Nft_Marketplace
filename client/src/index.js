@@ -22,7 +22,7 @@ const wagmiConfig = createConfig({autoConnect: true,connectors: w3mConnectors({ 
 const ethereumClient = new EthereumClient(wagmiConfig, chains1);
 const providers = new ethers.providers.Web3Provider(window.ethereum);
 const signer = providers.getSigner();
-const contractAddress = "0xE09f06875BD8BAa291fbfE72528bB8A634bD656c";
+const contractAddress = "0x63F5FC5E2068c642308801537ea6c003dD9EAB91";
 const contractAbi = abi.abi;
 const ncontract = new ethers.Contract(contractAddress, contractAbi, signer);
 

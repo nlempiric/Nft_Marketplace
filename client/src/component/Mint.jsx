@@ -59,7 +59,6 @@ const Mint = ({ ncontract, client }) => {
           const cid = metaData.ipnft;
 
           const mintNft = await ncontract.mintTo(
-            address,
             Data.name,
             Data.price,
             Data.description,

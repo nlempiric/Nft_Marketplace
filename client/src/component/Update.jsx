@@ -135,10 +135,10 @@ const Update = ({ ncontract, client }) => {
       const data = await ncontract.getData(t);
       console.log("dataaaaa", data);
       setData({
-        name: data[0],
-        price: Number(data[1]._hex),
-        description: data[2],
-        _imgUrl: data[3],
+        name: data[2],
+        price: Number(data[3]._hex),
+        description: data[4],
+        _imgUrl: data[5],
       });
     } catch (err) {
       console.log(err);

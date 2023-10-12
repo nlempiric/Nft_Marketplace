@@ -17,6 +17,7 @@ import Update from "./component/Update";
 import { NFTStorage, File, Blob } from "nft.storage";
 import { ToastContainer } from 'react-toastify';
 import ShowNft from "./component/ShowNft";
+import BuyNft from "./component/BuyNft";
 
 
 // const chains1 = [mainnet];
@@ -82,10 +83,15 @@ function App({ncontract}) {
           <ToastContainer/>
           <Routes>
             {/* <Route path='/' element={ <Navigate to="/" /> }/> */}
-            <Route path="/" element={<HomePage ncontract={ncontract} accounts={accounts}/>} />
+            <Route path="/" element={<HomePage ncontract={ncontract} accounts={accounts} allAccounts={allAccounts}/>} />
             <Route
               path="/mint"
               element={<Mint ncontract={ncontract} client={client}/>}
+              
+            />
+            <Route
+              path="/buynft/:tokenId"
+              element={<BuyNft ncontract={ncontract} client={client}/>}
               
             />
             <Route
