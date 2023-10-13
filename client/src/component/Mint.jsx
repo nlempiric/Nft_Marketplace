@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import Loader from "react-js-loader";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+const { utils } = require('ethers');
 
 
 const Mint = ({ ncontract, client }) => {
@@ -33,21 +33,23 @@ const Mint = ({ ncontract, client }) => {
     console.log("adress",address)
 
     if (
-      Data.name != "" &&
+      Data.name != null &&
       Data.price > 0 &&
-      Data.description != "" &&
-      Data._imgUrl != ""
+      Data.description != null &&
+      Data._imgUrl != null
     )
     {
         try {
           setIsLoading(true); 
+          const weiValue =utils.parseEther(Data.price);
+          console.log("Ether amounttttttttttttt",Number(weiValue));
           const imageFile = new File([Data.imgUrl], "nft.png", {
           type: "image/png",
           });
           console.log("Dataaaa",Data)
           const metaData = await client.store({
             name: Data.name,
-            price: Data.price,
+            price: weiValue,
             description: Data.description,
             image: imageFile
           });
@@ -60,7 +62,7 @@ const Mint = ({ ncontract, client }) => {
 
           const mintNft = await ncontract.mintTo(
             Data.name,
-            Data.price,
+            weiValue,
             Data.description,
             url,
             cid
@@ -75,10 +77,17 @@ const Mint = ({ ncontract, client }) => {
 
       } catch (err) {
         console.log(err);
+
         toast.error("Transaction")
       }
       finally
       {
+        setData({ ...Data,  price: null,
+          name: null,
+          description: null,
+          _imgUrl: null,
+          MetaDataURi: null,});
+
         setIsLoading(false);
       }
     }
@@ -164,7 +173,7 @@ const Mint = ({ ncontract, client }) => {
                     className="border border-1 border-gray-600 p-2 rounded-md"
                     name="price"
                     type="number"
-                    placeholder="Price"
+                    placeholder="Price in Gwei"
                     onChange={changeHandler}
                   />
                   <br />

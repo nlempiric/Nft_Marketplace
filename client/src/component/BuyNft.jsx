@@ -4,6 +4,8 @@ import { useNavigate, Navigate,useParams } from "react-router-dom";
 import Loader from "react-js-loader";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+const { utils } = require('ethers');
+
 
 
 const BuyNft = ({ ncontract, client }) => {
@@ -29,6 +31,7 @@ const BuyNft = ({ ncontract, client }) => {
       console.log("dataaaaa", data);
       setData({
         name: data[2],
+        // price:(data[3]._hex),
         price: Number(data[3]._hex),
         description: data[4],
         _imgUrl: data[5],
@@ -48,7 +51,8 @@ const BuyNft = ({ ncontract, client }) => {
   {
     try
     {
-        const data = await ncontract.buyNft(tokenId);
+      console.log("dataaa",Data)
+        const data = await ncontract.buyNft(tokenId,{value:Data.price});
         const d = await data.wait();
         console.log("dataaaaa",data)
         console.log("d event",d);
@@ -60,9 +64,13 @@ const BuyNft = ({ ncontract, client }) => {
         console.log("errorrrr",err)
         toast.error("Failed")
     }
+    finally
+    {
+      setIsLoading(false);
+    }
   }
 
-
+console.log("Dataaaaaaaaaaaa",Data)
 
   return (
     <>

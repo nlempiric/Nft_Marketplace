@@ -3,50 +3,53 @@ import { useAccount, useDisconnect } from "wagmi";
 import Loader from "react-js-loader";
 import { LinearGradient } from 'react-text-gradients'
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { ethers } from "ethers";
 
 
 
-const HomePage = ({ ncontract, accounts,allAccounts }) => {
+const HomePage = ({ ncontract, allAccounts }) => {
   const { address, isConnected } = useAccount();
   const [IDs, setIds] = useState([]);
   const [Df, setdf] = useState(false);
   const [Data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [buyorSaled, setbuyorSaled] = useState(false);
+  const [isLoading1, setIsLoading1] = useState(false);
+
   const navigate = useNavigate();
 
   const handleDivClick = (tokenId) => {
     navigate(`/buynft/${tokenId}`);
   };
 
+  const handlesell=async(tokenId)=>
+  {
+    try
+    {
+      setIsLoading1(true)
+      const tokenidNumber=Number(tokenId._hex)
+      console.log("token Id",tokenidNumber)
+      const removesell = await ncontract.removeSell(address,tokenidNumber);
+      const d=await removesell.wait();
+      console.log("removesell data",removesell)
+      console.log("remove sell event",d)
+      setIsLoading1(false)
+      toast.success("Nft Is Removed From Sell")
+    }
+    catch(err)
+    {
+      console.log("errorrrr",err)
+      toast.error("Failed")
+    }
+    finally
+    {
+      setIsLoading1(false);
+    }
+  }
 
-  console.log("all accountssssssss",allAccounts)
   useEffect(() => {
-    // const getIds = async () => {
-    //   try {
-    //     const DataArray = [];
-    //     for (let i = 0; i < accounts.length; i++) {
-    //       console.log("iiii", accounts[i]);
-    //       const balance = await ncontract.balanceOf(accounts[i]);
-    //       const balancinNumber = Number(balance._hex);
-    //       for (let j = 0; j < balancinNumber; j++) {
-    //         const tokenid = await ncontract.tokenOfOwnerByIndex(accounts[i], j);
-    //         const tokenidNumber = Number(tokenid._hex);
-    //         const data = await ncontract.getData(tokenidNumber);
-    //         DataArray.push(data);
-            
-    //       }
-
-    //       setIsLoading(false);
-    //     }
-    //     console.log("newData ....", DataArray)
-    //     setData( [ ...DataArray]);
-    //   } catch (error) {
-    //     console.log("error", error);
-    //   }
-    // };
-    // getIds();
-
-
+   
     const getData=async()=>
     {
       try
@@ -54,7 +57,7 @@ const HomePage = ({ ncontract, accounts,allAccounts }) => {
         const DataArray = [];
         for (let i = 0; i < allAccounts.length; i++) 
         {
-          console.log("iiii", allAccounts[i]);
+          // console.log("iiii", allAccounts[i]);
           const tokenarray = await ncontract.getsellingTokenIdsByAddress(allAccounts[i]);
           // const TokenArrayNumber=Number(tokenarray._hex)
           console.log("getsellingTokenIdsByAddress",tokenarray)
@@ -74,14 +77,19 @@ const HomePage = ({ ncontract, accounts,allAccounts }) => {
       {
         console.log("errorrrrr",err)
       }
+      finally
+      {
+        setIsLoading(false);
+      }
     }
     getData();
-  }, [accounts]); 
+  }, [address,buyorSaled]); 
 
 
   return (
     <>
-      <div className="container mx-auto flex flex-col items-center justify-center 2xl:px-[225px] bottom-0 h-full py-14">
+      {/* <div className="container mx-auto flex flex-col items-center justify-center 2xl:px-[225px] bottom-0 h-full py-14"> */}
+      <div className={`container mx-auto flex flex-col items-center justify-center 2xl:px-[225px] bottom-0 h-full py-14 ${isLoading1 ? "opacity-40" : ""}`}>    
         <div className="flex my-11 gap-6">
           <div className="w-full flex flex-col items-center justify-center gap-4">
               <h1 className="text-5xl font-bold font-serif pr-2"> Start building your  
@@ -119,35 +127,45 @@ const HomePage = ({ ncontract, accounts,allAccounts }) => {
                       const add=items[0];
                       const tokenId=items[1]; 
                       const name = items[2];
-                      const price = Number(items[3]._hex);
+                      const price1 = Number(items[3]._hex);
+                      const price=ethers.utils.formatEther(price1)
                       const desc = items[4];
                       const i = items[5];
                       
-
+                      
                       return (
                         <>
                           <div
                             key={index}
-                            className="w-[250px] h-[350px] bg-[#0b1138] rounded overflow-hidden shadow-lg my-4 "
+                            className="w-[250px] h-[370px] bg-[#0b1138] rounded overflow-hidden shadow-lg my-4 "
                           >
                             <img
-                              className="w-full h-[70%] object-cover"
+                              className="w-full h-[60%] object-cover"
                               src={i}
                               alt="Sunset in the mountains"
                             />
-                            <div className="px-6 py-2">
+                            <div className="flex flex-col gap-2 px-6 py-2">
                               <div className="flex items-center justify-between">
-                                <div className="font-bold text-xl mb-2 flex items-center">
+                                <div className="font-bold text-xl flex items-center ">
                                   {name}
                                 </div>
-                                <button className="border border-1 border-gray-600 px-3 py-1 rounded-full hover:bg-gray-600" onClick={() => handleDivClick(tokenId)}>
-                                  Buy
-                                </button>
+                                
                               </div>
-                              <div className="font-semibold text-base mb-2">
-                                {price}Eth
-                              </div>
+                                <div className="font-semibold">
+                                  {price}Eth
+                                </div>
+                                  
                               <p className="text-sm text-gray-300">{desc}</p>
+                                {add==address ? 
+                                      <button className="border border-1 border-gray-600 px-3 py-1 rounded-full hover:bg-gray-600" onClick={() => handlesell(tokenId)}>
+                                      Remove Sell
+                                      </button>
+                                    : 
+                                      <button className="border border-1 border-gray-600 px-3 py-1 rounded-full hover:bg-gray-600" onClick={() => handleDivClick(tokenId)}>
+                                      Buy
+                                    </button>
+                                  }
+
                             </div>
                           </div>
                         </>
@@ -161,6 +179,14 @@ const HomePage = ({ ncontract, accounts,allAccounts }) => {
           ""
         )}
       </div>
+      {isLoading1 ?
+        <div className="absolute top-[750px] mx-[45%]">
+          <Loader loaded={isLoading1} type="spinner-cub" bgColor={"#FFFFFF"} color={'#FFFFFF'}>
+            Loading...
+          </Loader>
+        </div> 
+        
+        : ""}
     </>
   );
 };

@@ -32,7 +32,7 @@ import BuyNft from "./component/BuyNft";
 // const contractAbi = abi.abi;
 // const ncontract = new ethers.Contract(contractAddress, contractAbi, signer);
 
-function App({ncontract}) {
+function App({ncontract,providers}) {
 
   const { address, isConnected } = useAccount();
   const [allAccounts, setallAccounts] = useState([]);
@@ -44,23 +44,32 @@ function App({ncontract}) {
 
   const handleConnect = async () => {
     try {
-      if (window.ethereum) {
-          const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
+      // if (window.ethereum) {
+      //     const accounts = await window.ethereum.request({
+      //     method: "eth_requestAccounts",
+      //   });
+      //   setallAccounts(accounts);
+      //   const cleanAddress = (address) =>
+      //   address ? address.trim().toLowerCase() : "";
+
+      //   const cleanAccounts =await accounts.map(cleanAddress);
+      //   const cleanTargetAddress = cleanAddress(address);
+
+      //   const filteredAddresses = cleanAccounts.filter(
+      //     (cleanedAddress) => cleanedAddress !== cleanTargetAddress
+      //   );
+      //  // console.log("filter addresss",filteredAddresses)
+      //   setaccounts(filteredAddresses);
+      // }
+      providers.listAccounts()
+      .then(accounts => {
+        console.log("MetaMask accounts:", accounts);
         setallAccounts(accounts);
-        const cleanAddress = (address) =>
-        address ? address.trim().toLowerCase() : "";
-
-        const cleanAccounts =await accounts.map(cleanAddress);
-        const cleanTargetAddress = cleanAddress(address);
-
-        const filteredAddresses = cleanAccounts.filter(
-          (cleanedAddress) => cleanedAddress !== cleanTargetAddress
-        );
-       // console.log("filter addresss",filteredAddresses)
-        setaccounts(filteredAddresses);
-      }
+    
+  })
+  .catch(error => {
+    console.error("Error fetching MetaMask accounts:", error);
+  });
     } catch (error) {
       console.error("Error fetching accounts:", error);
     }

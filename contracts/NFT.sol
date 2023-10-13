@@ -125,10 +125,7 @@ contract NFT is ERC721 ,ERC721Enumerable,Ownable ,ERC721URIStorage{
         removeTokenIdsByAddress(fromAddress,id);
         isNftListed[id]=false;
         TokenIdsByAddress[msg.sender].push(id);
-        if (msg.value > price) 
-        {
-            payable(msg.sender).transfer(msg.value - price);
-        }
+        payable(fromAddress).transfer(msg.value);
         emit buyNftEvent(fromAddress,msg.sender,id);
     }
 
@@ -145,7 +142,7 @@ contract NFT is ERC721 ,ERC721Enumerable,Ownable ,ERC721URIStorage{
             return owner();
         }
 
-    function Update(uint _tokenId,string memory _name, uint _price, string memory _description, string memory _tokenUri ,string memory _metadataTokenUri) public onlyOwner returns (string memory)
+    function Update(uint _tokenId,string memory _name, uint _price, string memory _description, string memory _tokenUri ,string memory _metadataTokenUri) public returns (string memory)
     {
         require(DetailsOfTokenID[_tokenId].price > 0, "Token ID does not exist");
         DetailsOfTokenID[_tokenId]=Details(msg.sender,_tokenId,_name,_price,_description,_tokenUri,_metadataTokenUri);

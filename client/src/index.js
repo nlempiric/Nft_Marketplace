@@ -22,14 +22,14 @@ const wagmiConfig = createConfig({autoConnect: true,connectors: w3mConnectors({ 
 const ethereumClient = new EthereumClient(wagmiConfig, chains1);
 const providers = new ethers.providers.Web3Provider(window.ethereum);
 const signer = providers.getSigner();
-const contractAddress = "0x63F5FC5E2068c642308801537ea6c003dD9EAB91";
+const contractAddress = "0x4b62F6DbA6b81bcD9CbbB4E16Df6D4Be90F1843f";
 const contractAbi = abi.abi;
 const ncontract = new ethers.Contract(contractAddress, contractAbi, signer);
 
 root.render(
   <React.StrictMode>
     <WagmiConfig config={wagmiConfig}>
-      <App ncontract={ncontract}/>
+      <App ncontract={ncontract} providers={providers}/>
       <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
 
     </WagmiConfig>

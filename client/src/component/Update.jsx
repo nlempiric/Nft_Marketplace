@@ -4,6 +4,7 @@ import { useNavigate, Navigate } from "react-router-dom";
 import Loader from "react-js-loader";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+const { utils } = require('ethers');
 
 
 const Update = ({ ncontract, client }) => {
@@ -65,9 +66,12 @@ const Update = ({ ncontract, client }) => {
           console.log("imageFileee", imageFile);
         }
 
+        const weiValue =utils.parseEther(Data.price);
+        console.log("Ether amounttttttttttttt",Number(weiValue));
+        console.log("Ether amounttttttttttttt",weiValue);
         const metaData = await client.store({
           name: Data.name,
-          price: Data.price,
+          price: weiValue,
           description: Data.description,
           image: imageFile,
         });
@@ -81,7 +85,7 @@ const Update = ({ ncontract, client }) => {
         const updateData = await ncontract.Update(
           tid,
           Data.name,
-          Data.price,
+          weiValue,
           Data.description,
           url,
           cid
@@ -89,14 +93,20 @@ const Update = ({ ncontract, client }) => {
         const up = await updateData.wait();
 
         console.log("Updated successfully");
-        // alert("Updated Successfully");
         toast.success("update Successfuly")
+        setData({ ...Data,  price: null,
+          name: null,
+          description: null,
+          _imgUrl: null,
+          });
       } catch (err) {
         console.log(err);
         toast.error("Error in updating NFT")
       }
       finally
       {
+       
+
         setIsLoading(false); 
 
       }
