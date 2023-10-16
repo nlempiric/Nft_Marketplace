@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#root
+{
+    /* background-color: #06061C; */
+   color: white;
+    font-family:'Courier New', Courier, monospace;
+    background: rgb(6,6,28);
+background: linear-gradient(90deg, rgb(0, 0, 5) 0%, rgb(2, 0, 19) 0%, rgb(1, 13, 50) 72%, rgb(0, 14, 10) 100%, rgb(16, 12, 12) 100%, rgb(15, 23, 48) 100%, rgba(0,61,200,1) 100%);    
+
+}
+option
+{
+    color: black;
+}
+input
+{
+    color: black;
+}
+header
+{
+    background: rgb(26,37,71);
+background: linear-gradient(90deg, rgb(9, 17, 40) 0%, rgb(8, 17, 45) 29%, rgba(3,8,42,1) 62%, rgba(0,0,0,1) 100%, rgb(0, 0, 4) 100%, rgb(0, 0, 0) 100%, rgb(9, 17, 47) 100%, rgb(2, 35, 112) 100%);
+}
